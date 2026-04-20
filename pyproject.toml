@@ -7,7 +7,12 @@ authors = [
     { name = "kejea23912", email = "kejea23912@gmail.com" }
 ]
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "marimo>=0.23.1",
+    "networkx>=3.6.1",
+    "pydantic>=2.13.2",
+    "pytest>=9.0.3",
+]
 
 [build-system]
 requires = ["uv_build>=0.9.27,<0.10.0"]
