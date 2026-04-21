@@ -1,5 +1,5 @@
 [project]
-name = "projet-04-adduction-eau"
+name = "adduction_eau"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
