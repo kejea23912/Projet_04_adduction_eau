@@ -1,25 +1,21 @@
-import marimo
+"""Description.
 
-__generated_with = "0.23.1"
-app = marimo.App(width="medium")
+Interface en ligne de commande pour résoudre le problème d'adduction d'eau créer avec Typer
 
+"""
 
-@app.cell
-def _():
-    import marimo as mo
+import typer
 
-    return (mo,)
+from adduction_eau.data import RESEAU_ADDUCTION
+from adduction_eau.resolution import capacites_optimales, ordre_travaux, resolution
 
+app = typer.Typer()
+console = Console()
 
-@app.cell(hide_code=True)
-def _(mo):
-    mo.md(r"""
-    #Problème d'adduction d'eau
-    iterface graphique et CLI
-    """)
-    return
-
+@app.command()
+def flot_actuel() -> None:
+    """ Afiche le flot maximal du réseau historique"""
 
 if __name__ == "__main__":
-    app.run()
+    app()
 
