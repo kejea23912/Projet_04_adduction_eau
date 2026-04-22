@@ -12,6 +12,8 @@ dependencies = [
     "networkx>=3.6.1",
     "pydantic>=2.13.2",
     "pytest>=9.0.3",
+    "rich>=15.0.0",
+    "typer>=0.24.1",
 ]
 
 [build-system]
