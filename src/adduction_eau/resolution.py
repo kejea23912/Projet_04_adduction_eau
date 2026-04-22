@@ -34,20 +34,53 @@ def resolution(reseau: ReseauEau) -> SolutionFlot:
     )
 
 
+def _recherche_binaire_min(reseau: ReseauEau, arc: tuple[str, str], capacite_fixe_arc: tuple[str, str], capacite_fixe: int, flot_cible: int) -> int:
+    """Trouve par dichotomie la capacité minimale de `arc` pour atteindre `flot_cible`.
+
+    Les autres arcs sont fixes. La capacité de `capacite_fixe_arc` est fixée à `capacite_fixe`.
+    """
+    borne_inf, borne_sup = 1, INFINI
+    while borne_inf < borne_sup:
+        milieu = (borne_inf + borne_sup) // 2
+        reseau_test = (
+            reseau
+            .avec_arc_modifie(*arc, milieu)
+            .avec_arc_modifie(*capacite_fixe_arc, capacite_fixe)
+        )
+        if resolution(reseau_test).valeur >= flot_cible:
+            borne_sup = milieu
+        else:
+            borne_inf = milieu + 1
+    return borne_inf
+
+
 def capacites_optimales(reseau: ReseauEau) -> tuple[int, int, int]:
+    """Détermine les capacités minimales pour A→E et I→L permettant d'atteindre le flot maximal.
+
+    Utilise deux recherches binaires successives :
+    1. Trouve la capacité minimale de A→E (avec I→L illimité).
+    2. Trouve la capacité minimale de I→L (avec la capacité A→E trouvée en étape 1).
+
+    Complexité : O(log(INFINI)) appels à `resolution` au lieu de O(INFINI²).
+    """
     reseau_illimite = reseau.avec_arc_modifie("A", "E", INFINI).avec_arc_modifie("I", "L", INFINI)
     flot_max = resolution(reseau_illimite).valeur
 
-    for capacite_il in range(1, INFINI):
-        for capacite_ae in range(1, INFINI):
-            reseau_test = (
-                reseau
-                .avec_arc_modifie("A", "E", capacite_ae)
-                .avec_arc_modifie("I", "L", capacite_il)
-            )
-            if resolution(reseau_test).valeur >= flot_max:
-                return capacite_ae, capacite_il, flot_max
-    return INFINI, INFINI, flot_max
+    capacite_ae = _recherche_binaire_min(
+        reseau,
+        arc=("A", "E"),
+        capacite_fixe_arc=("I", "L"),
+        capacite_fixe=INFINI,
+        flot_cible=flot_max,
+    )
+    capacite_il = _recherche_binaire_min(
+        reseau,
+        arc=("I", "L"),
+        capacite_fixe_arc=("A", "E"),
+        capacite_fixe=capacite_ae,
+        flot_cible=flot_max,
+    )
+    return capacite_ae, capacite_il, flot_max
 
 
 def ordre_travaux(reseau: ReseauEau, capacite_ae: int, capacite_il: int) -> list[tuple[str, int]]:

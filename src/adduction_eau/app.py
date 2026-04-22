@@ -15,7 +15,7 @@ console = Console()
 
 @app.command()
 def flot_actuel() -> None:
-    """ Afiche le flot maximal du réseau historique"""
+    """ Affiche le flot maximal du réseau historique"""
     sol = resolution(RESEAU_ADDUCTION)
 
     console.print(f"\n[bold]Flot maximal actuel :[/bold] {sol.valeur} milliers de m3/ jour\n")

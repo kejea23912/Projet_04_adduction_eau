@@ -19,7 +19,7 @@ def _():
     import marimo as mo
     import networkx as nx
     import matplotlib.pyplot as plt
-    from src.adduction_eau.data import RESEAU_ADDUCTION
+    from adduction_eau.data import RESEAU_ADDUCTION
     return RESEAU_ADDUCTION, mo, nx, plt
 
 
