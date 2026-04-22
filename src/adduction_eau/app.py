@@ -10,7 +10,7 @@ from adduction_eau.resolution import capacites_optimales, ordre_travaux, resolut
 from rich.console import Console
 from rich.table import Table
 
-app = typer.Typer()
+app = typer.Typer(help="Résolution du problème d'adduction d'eau.")
 console = Console()
 
 @app.command()
