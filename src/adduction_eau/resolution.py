@@ -5,8 +5,8 @@ Utilise l'algorithme de Dinic via networkx.
 """
 
 import networkx as nx
-from .data import ReseauEau, SolutionFlot
 from pydantic import BaseModel
+from .data import ReseauEau, SolutionFlot
 
 SUPER_SOURCE = "S"
 SUPER_PUITS = "T"
@@ -35,7 +35,13 @@ def resolution(reseau: ReseauEau) -> SolutionFlot:
     )
 
 
-def _recherche_binaire_min(reseau: ReseauEau, arc: tuple[str, str], capacite_fixe_arc: tuple[str, str], capacite_fixe: int, flot_cible: int) -> int:
+def _recherche_binaire_min(
+    reseau: ReseauEau,
+    arc: tuple[str, str],
+    capacite_fixe_arc: tuple[str, str],
+    capacite_fixe: int,
+    flot_cible: int,
+) -> int:
     """Trouve par dichotomie la capacité minimale de `arc` pour atteindre `flot_cible`.
 
     Les autres arcs sont fixes. La capacité de `capacite_fixe_arc` est fixée à `capacite_fixe`.
@@ -101,9 +107,7 @@ def ordre_travaux(reseau: ReseauEau, capacite_ae: int, capacite_il: int) -> list
         (f"Réfection A→E (cap={capacite_ae})", flot_final),
     ]
 
-
-
-#  Partie supplémentaire des consignes
+# ---------Partie supplémentaire pour la création de APP2.py -----------------------
 
 class PropositionAmelioration(BaseModel):
     """Proposition d'amélioration d'un arc pour augmenter le flot du réseau."""
@@ -190,7 +194,7 @@ def arcs_a_ameliorer(reseau: ReseauEau) -> SolutionAmelioration:
             and (u, v) not in deja_selectionnes
         ]
         if not candidats:
-            break  
+            break
 
         meilleur = max(
             candidats,
@@ -202,7 +206,6 @@ def arcs_a_ameliorer(reseau: ReseauEau) -> SolutionAmelioration:
         arcs_selectionnes.append(meilleur)
         deja_selectionnes.add(meilleur)
 
-    
     propositions: list[PropositionAmelioration] = []
     caps_fixes: list[tuple[tuple[str, str], int]] = []
 
@@ -239,3 +242,30 @@ def arcs_a_ameliorer(reseau: ReseauEau) -> SolutionAmelioration:
         flot_theorique=flot_theorique,
         propositions=propositions,
     )
+
+def ordre_travaux_generique(
+    reseau: ReseauEau,
+    propositions: list[PropositionAmelioration],
+) -> list[tuple[PropositionAmelioration, int]]:
+    """Ordre optimal des travaux pour une liste de propositions, par approche gloutonne.
+
+    À chaque étape, applique la proposition qui maximise le gain de flot immédiat.
+
+    Retourne la liste ordonnée de (proposition, flot_après_travaux).
+    """
+    restantes = list(propositions)
+    reseau_courant = reseau
+    resultat: list[tuple[PropositionAmelioration, int]] = []
+    while restantes:
+        meilleure = max(
+            restantes,
+            key=lambda p: resolution(
+                reseau_courant.avec_arc_modifie(p.origine, p.destination, p.capacite_requise)
+            ).valeur,
+        )
+        reseau_courant = reseau_courant.avec_arc_modifie(
+            meilleure.origine, meilleure.destination, meilleure.capacite_requise
+        )
+        restantes.remove(meilleure)
+        resultat.append((meilleure, resolution(reseau_courant).valeur))
+    return resultat
