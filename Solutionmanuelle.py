@@ -19,7 +19,7 @@ def _():
     import marimo as mo
     import networkx as nx
     import matplotlib.pyplot as plt
-    from adduction_eau.data import RESEAU_ADDUCTION
+    from src.adduction_eau.data import RESEAU_ADDUCTION
     return RESEAU_ADDUCTION, mo, nx, plt
 
 
@@ -115,7 +115,7 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     ---
-    ## Question 1 — Flot maximal du réseau actuel
+    
     """)
     return
 
@@ -157,7 +157,7 @@ Le flot est insuffisant. La région décide de rénover **(A→E)** et **(I→L)
 def _(mo):
     mo.md(r"""
     ---
-    ## Question 2 — Capacités à prévoir pour (A→E) et (I→L)
+ 
 
     **Analyse des goulots :**
 
@@ -209,7 +209,7 @@ def _(DEMANDES, affichage, flot_q2, mo, reseau_renove, valeur_q1, valeur_q2):
 def _(mo):
     mo.md(r"""
     ---
-    ## Question 3 — Ordre optimal des travaux
+   
     """)
     return
 
@@ -229,10 +229,10 @@ def _(DEMANDES, RESEAU_ADDUCTION, construit_graphe, nx):
         )
         return int(valeur)
 
-    flot_depart        = flot_scenario(7,  4)   # réseau actuel
-    flot_ae_en_premier = flot_scenario(20, 4)   # étape 1 option A
-    flot_il_en_premier = flot_scenario(7,  15)  # étape 1 option B
-    flot_final         = flot_scenario(20, 15)  # après les deux travaux
+    flot_depart        = flot_scenario(7,  4)  
+    flot_ae_en_premier = flot_scenario(20, 4)   
+    flot_il_en_premier = flot_scenario(7,  15)  
+    flot_final         = flot_scenario(20, 15)  
     return flot_ae_en_premier, flot_depart, flot_final, flot_il_en_premier, flot_scenario
 
 

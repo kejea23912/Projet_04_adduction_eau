@@ -6,6 +6,7 @@ Utilise l'algorithme de Dinic via networkx.
 
 import networkx as nx
 from .data import ReseauEau, SolutionFlot
+from pydantic import BaseModel
 
 SUPER_SOURCE = "S"
 SUPER_PUITS = "T"
@@ -99,3 +100,142 @@ def ordre_travaux(reseau: ReseauEau, capacite_ae: int, capacite_il: int) -> list
         (f"Réfection I→L (cap={capacite_il})", flot_il_premier),
         (f"Réfection A→E (cap={capacite_ae})", flot_final),
     ]
+
+
+
+#  Partie supplémentaire des consignes
+
+class PropositionAmelioration(BaseModel):
+    """Proposition d'amélioration d'un arc pour augmenter le flot du réseau."""
+
+    origine: str
+    destination: str
+    capacite_actuelle: int
+    capacite_requise: int
+
+    @property
+    def gain(self) -> int:
+        """Augmentation de capacité nécessaire."""
+        return self.capacite_requise - self.capacite_actuelle
+
+    def __str__(self) -> str:
+        return (
+            f"({self.origine}→{self.destination} : "
+            f"{self.capacite_actuelle} → {self.capacite_requise}, +{self.gain})"
+        )
+
+class SolutionAmelioration(BaseModel):
+    """Solution d'optimisation : arcs à améliorer pour atteindre le flot maximal théorique."""
+
+    flot_actuel: int
+    flot_theorique: int
+    propositions: list[PropositionAmelioration]
+
+    @property
+    def gain_flot(self) -> int:
+        """Gain de flot total apporté par les améliorations."""
+        return self.flot_theorique - self.flot_actuel
+
+
+def arcs_a_ameliorer(reseau: ReseauEau) -> SolutionAmelioration:
+    """Trouve le minimum d'arcs à améliorer pour atteindre le flot maximal théorique.
+
+    Le flot maximal théorique est celui obtenu en supprimant toutes les contraintes
+    de capacité sur les canalisations (arcs), les capacités des réservoirs restant fixes.
+
+    Algorithme en deux phases :
+
+    Phase 1 — Sélection gloutonne des arcs à améliorer :
+        À chaque itération, identifie la coupe minimale du réseau courant et choisit
+        l'arc de la coupe dont l'amélioration à capacité illimitée maximise le gain
+        de flot. L'arc sélectionné est temporairement mis à INFINI, puis on répète
+        jusqu'à atteindre le flot théorique.
+
+    Phase 2 — Dichotomie séquentielle pour les capacités minimales :
+        Pour chaque arc identifié en phase 1 (dans l'ordre de sélection), cherche
+        par dichotomie la capacité minimale permettant d'atteindre le flot théorique,
+        en supposant que les arcs précédemment traités sont à leur capacité calculée
+        et que les arcs suivants sont encore à capacité illimitée.
+
+    Seuls les arcs dont la capacité requise est strictement supérieure à la capacité
+    actuelle sont inclus dans les propositions.
+    """
+    arcs_originaux = {(a.origine, a.destination): a.capacite for a in reseau.arcs}
+    reseau_illimite = reseau
+    for arc in reseau.arcs:
+        reseau_illimite = reseau_illimite.avec_arc_modifie(arc.origine, arc.destination, INFINI)
+
+    flot_theorique = resolution(reseau_illimite).valeur
+    flot_actuel = resolution(reseau).valeur
+
+    if flot_actuel >= flot_theorique:
+        return SolutionAmelioration(
+            flot_actuel=flot_actuel,
+            flot_theorique=flot_theorique,
+            propositions=[],
+        )
+
+    reseau_courant = reseau
+    arcs_selectionnes: list[tuple[str, str]] = []
+    deja_selectionnes: set[tuple[str, str]] = set()
+
+    while resolution(reseau_courant).valeur < flot_theorique:
+        graphe = construit_graphe(reseau_courant)
+        _, (S, T) = nx.minimum_cut(graphe, SUPER_SOURCE, SUPER_PUITS)
+
+        candidats = [
+            (u, v) for u, v in graphe.edges()
+            if u in S and v in T
+            and (u, v) in arcs_originaux
+            and (u, v) not in deja_selectionnes
+        ]
+        if not candidats:
+            break  
+
+        meilleur = max(
+            candidats,
+            key=lambda arc: resolution(
+                reseau_courant.avec_arc_modifie(*arc, INFINI)
+            ).valeur,
+        )
+        reseau_courant = reseau_courant.avec_arc_modifie(*meilleur, INFINI)
+        arcs_selectionnes.append(meilleur)
+        deja_selectionnes.add(meilleur)
+
+    
+    propositions: list[PropositionAmelioration] = []
+    caps_fixes: list[tuple[tuple[str, str], int]] = []
+
+    for i, arc in enumerate(arcs_selectionnes):
+        reseau_contexte = reseau
+        for arc_fixe, cap_fixe in caps_fixes:
+            reseau_contexte = reseau_contexte.avec_arc_modifie(*arc_fixe, cap_fixe)
+        for arc_suivant in arcs_selectionnes[i + 1:]:
+            reseau_contexte = reseau_contexte.avec_arc_modifie(*arc_suivant, INFINI)
+
+        lo, hi = 1, INFINI
+        while lo < hi:
+            mid = (lo + hi) // 2
+            if resolution(reseau_contexte.avec_arc_modifie(*arc, mid)).valeur >= flot_theorique:
+                hi = mid
+            else:
+                lo = mid + 1
+        cap_requise = lo
+        cap_actuelle = arcs_originaux[arc]
+        caps_fixes.append((arc, max(cap_actuelle, cap_requise)))
+
+        if cap_requise > cap_actuelle:
+            propositions.append(
+                PropositionAmelioration(
+                    origine=arc[0],
+                    destination=arc[1],
+                    capacite_actuelle=cap_actuelle,
+                    capacite_requise=cap_requise,
+                )
+            )
+
+    return SolutionAmelioration(
+        flot_actuel=flot_actuel,
+        flot_theorique=flot_theorique,
+        propositions=propositions,
+    )
