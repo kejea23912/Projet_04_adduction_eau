@@ -20,7 +20,8 @@ def construit_graphe(reseau: ReseauEau) -> nx.DiGraph:
     for arc in reseau.arcs:
         graphe.add_edge(arc.origine, arc.destination, capacity=arc.capacite)
     for ville in reseau.villes:
-        graphe.add_edge(ville, SUPER_PUITS, capacity=INFINI)
+        cap = (reseau.capacites_villes or {}).get(ville, INFINI)
+        graphe.add_edge(ville, SUPER_PUITS, capacity=cap)
     return graphe
 
 

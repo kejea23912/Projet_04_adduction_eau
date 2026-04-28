@@ -38,6 +38,7 @@ class ReseauEau(BaseModel):
     reservoirs: dict[str, PositiveInt]
     arcs: list[Arc]
     villes: list[str]
+    capacites_villes: dict[str, PositiveInt] | None = None
 
     @model_validator(mode="after")
     def verifie_coherence(self) -> Self:
@@ -97,4 +98,5 @@ RESEAU_ADDUCTION = ReseauEau(
         Arc(origine="K", destination="J", capacite=10),
     ],
     villes=["J", "K", "L"],
+    capacites_villes={"J": 15, "K": 20, "L": 15},
 )
