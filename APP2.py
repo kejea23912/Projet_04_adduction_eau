@@ -11,7 +11,16 @@ def _():
     import matplotlib.pyplot as plt
     from adduction_eau.data import RESEAU_ADDUCTION
     from adduction_eau.resolution import arcs_a_ameliorer, ordre_travaux_generique, resolution
-    return RESEAU_ADDUCTION, arcs_a_ameliorer, mo, nx, ordre_travaux_generique, plt, resolution
+
+    return (
+        RESEAU_ADDUCTION,
+        arcs_a_ameliorer,
+        mo,
+        nx,
+        ordre_travaux_generique,
+        plt,
+        resolution,
+    )
 
 
 @app.cell
@@ -29,6 +38,7 @@ def _():
         "J": "#F0997B", "K": "#F0997B", "L": "#F0997B",
     }
     return COULEURS, POS
+
 
 @app.cell
 def _(COULEURS, POS, nx, plt):
@@ -54,6 +64,7 @@ def _(COULEURS, POS, nx, plt):
         _ax.axis("off")
         plt.tight_layout()
         return _ax
+
     return (affichage,)
 
 
@@ -67,12 +78,16 @@ def _(RESEAU_ADDUCTION, affichage, mo, resolution):
         ),
         affichage(RESEAU_ADDUCTION, "Réseau initial — capacités des arcs"),
     ])
-
+    return
 
 
 @app.cell
 def _(mo):
-    mo.md("---\n## Étape 1 — Quels arcs améliorer ?")
+    mo.md("""
+    ---
+    ## Étape 1 — Quels arcs améliorer ?
+    """)
+    return
 
 
 @app.cell
@@ -83,6 +98,7 @@ def _(RESEAU_ADDUCTION, arcs_a_ameliorer, mo):
         label="Calculer les propositions d'amélioration",
     )
     btn_analyse
+    return (btn_analyse,)
 
 
 @app.cell
@@ -100,10 +116,13 @@ def _(btn_analyse, mo):
     return (solution,)
 
 
-
 @app.cell
 def _(mo):
-    mo.md("---\n## Étape 2 — Choisissez les arcs à modifier")
+    mo.md("""
+    ---
+    ## Étape 2 — Choisissez les arcs à modifier
+    """)
+    return
 
 
 @app.cell
@@ -133,7 +152,11 @@ def _(RESEAU_ADDUCTION, affichage, mo, selecteur):
 
 @app.cell
 def _(mo):
-    mo.md("---\n## Étape 3 — Ordre optimal des travaux")
+    mo.md("""
+    ---
+    ## Étape 3 — Ordre optimal des travaux
+    """)
+    return
 
 
 @app.cell
@@ -144,6 +167,7 @@ def _(RESEAU_ADDUCTION, choix, mo, ordre_travaux_generique):
         label="Calculer l'ordre optimal des travaux",
     )
     btn_ordre
+    return (btn_ordre,)
 
 
 @app.cell
@@ -174,6 +198,7 @@ def _(RESEAU_ADDUCTION, btn_ordre, mo, resolution):
             + "\n".join(_lignes)
         ),
     ])
+    return
 
 
 if __name__ == "__main__":
