@@ -2,7 +2,6 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/python-3.13%2B-blue?style=flat-square&logo=python" alt="Python 3.13+"/>
-  <img src="https://img.shields.io/badge/licence-MIT-green?style=flat-square" alt="MIT"/>
   <img src="https://img.shields.io/badge/networkx-Dinic-purple?style=flat-square" alt="NetworkX"/>
   <img src="https://img.shields.io/badge/CLI-Typer-orange?style=flat-square" alt="Typer"/>
   <img src="https://img.shields.io/badge/tests-pytest-yellow?style=flat-square&logo=pytest" alt="pytest"/>
@@ -214,7 +213,7 @@ uv run marimo run APP2.py
 ### utilisation
 
 - Etape 1 
-<img src="file:///C:/Users/kenny/Pictures/Screenshots/Screenshot%202026-05-05%20083046.png" alt="Mon image" width="500" />
+<img width="2584" height="972" alt="Image" src="https://github.com/user-attachments/assets/ac9e41de-cac2-4f6b-b667-f89290c598b8" />
 
 Cliquer sur le bouton Calculer les propositions d’amélioration.
 Ce bouton calcule toutes les améliorations possibles, quelle que
