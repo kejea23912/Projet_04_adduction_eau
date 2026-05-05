@@ -221,9 +221,11 @@ soit la configuration du réseau.
 
 - Etape 2 
 
-
+ Sélectionnez les arcs à modifier parmi ceux proposés par le programme.
 
 - Etape 3
+
+Puis calculez l’ordre optimal des travaux, qui dépendra de votre choix précédent, afin de vous guider dans leur réalisation
 
 ---
 
@@ -239,3 +241,6 @@ soit la configuration du réseau.
 | [pytest](https://pytest.org) | Tests unitaires |
 
 ---
+
+
+Fait par **Kenny Jean-elie** et **Ndèye Fatou DIOP**
