@@ -7,14 +7,13 @@ from typing import Self
 from pydantic import BaseModel, NonNegativeInt, PositiveInt, model_validator
 
 class Arc(BaseModel):
-    """Représente une canalisation orientée entre deux nœuds avec une capacité maximale.
-
+    """
+    Représente une canalisation orientée entre deux nœuds avec une capacité maximale.
     Exemples:
 
-    >>> Arc(origine="A", destination="E", capacite=7)
-    Arc(origine='A', destination='E', capacite=7)
+    >>> Arc(origine="A", destination="E", capacite=7)   
     >>> Arc(origine="A", destination="E", capacite=0)
-    Traceback (most recent call last):
+        Traceback (most recent call last):
 
     """
 

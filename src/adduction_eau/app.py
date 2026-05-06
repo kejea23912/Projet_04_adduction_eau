@@ -54,7 +54,7 @@ def travaux() -> None:
 
 
 
- ## partie sueplementaire
+ ## partie supplémentaire
 
 @app.command()
 def optimisation() -> None:
