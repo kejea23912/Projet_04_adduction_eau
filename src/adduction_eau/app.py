@@ -6,7 +6,6 @@ Interface en ligne de commande pour résoudre le problème d'adduction d'eau cr�
 
 import typer
 from adduction_eau.data import RESEAU_ADDUCTION
-from adduction_eau.resolution import capacites_optimales, ordre_travaux, resolution
 from rich.console import Console
 from rich.table import Table
 from adduction_eau.resolution import arcs_a_ameliorer, capacites_optimales, ordre_travaux, resolution
