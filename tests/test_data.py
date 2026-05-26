@@ -55,7 +55,7 @@ def test_solution_flot_valide():
     sol = SolutionFlot(
         reseau=RESEAU_ADDUCTION,
         valeur=37,
-        repartition={"J": 4, "K": 30, "L": 3},
+        repartition={"J": 14, "K": 20, "L": 3},
     )
     assert sol.valeur == 37
 
@@ -64,7 +64,7 @@ def test_solution_flot_repartition_incoherente():
         SolutionFlot(
             reseau=RESEAU_ADDUCTION,
             valeur=37,
-            repartition={"J": 4, "K": 30, "L": 10}, 
+            repartition={"J": 14, "K": 20, "L": 3}, 
         )
 
 def test_solution_flot_villes_manquantes():
