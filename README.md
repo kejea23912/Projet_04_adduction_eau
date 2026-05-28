@@ -13,20 +13,19 @@
 
 ---
 
-**adduction-eau** est un outil CLI en Python pour analyser et optimiser un réseau de distribution d'eau.  
+**adduction-eau** est un outil CLI avec une interface graphique en Python pour analyser et optimiser un réseau de distribution d'eau.  
 Il calcule le **flot maximal** d'un réseau de canalisations, identifie les **goulots d'étranglement**, détermine les capacités à rénover, et ordonne les travaux pour maximiser le gain à chaque étape.
 
-Le tout avec une sortie terminal et une interface de commandes fluide via [Typer](https://typer.tiangolo.com).
-
+Le tout avec une sortie terminal et une interface de commandes fluide via [Typer](https://typer.tiangolo.com), et une interface graphique via [Marimo](https://marimo.io)
 ---
 
-## ✨ Fonctionnalités
+## ✨ Fonctionnalités de l'interface de commandes
 
 - 📊 **Flot actuel** — calcule le flot maximal du réseau historique et affiche la répartition par ville
-- 🔧 **Optimisation** — détermine les nouvelles capacités à prévoir pour les arcs critiques (`A→E` et `I→L`)
+- 🔧 **ameliorationregion** — détermine les nouvelles capacités à prévoir pour les arcs critiques (`A→E` et `I→L`)
 - 🏗️ **Ordre des travaux** — trouve l'ordre optimal de réfection pour maximiser le gain à chaque étape
 - 🧩 **Modèle de données validé** — modèles Pydantic robustes avec vérification de cohérence
-- 🔬 **Exploration interactive** — notebook [Marimo](https://marimo.io) pour visualiser le réseau et les flots
+- 🔬 **Interface graphique** — notebook [Marimo](https://marimo.io) pour une resolution générale
 - ✅ **Tests complets** — suite pytest couvrant données, résolution et optimisation
 
 ---
@@ -54,7 +53,7 @@ pip install -e .
 ### Voir le flot actuel
 
 ```bash
-adduction-eau flot-actuel
+uv run adduction-eau flot-actuel
 ```
 
 ```
@@ -75,7 +74,7 @@ Flot maximal actuel : 37 milliers de m3/ jour
 ### Calculer les capacités optimales
 
 ```bash
-adduction-eau amelioration
+uv run adduction-eau ameliorationregion
 ```
 
 ```
@@ -91,7 +90,7 @@ Nouveau flot optimal : 49 milliers de m³/jour
 ### Déterminer l'ordre optimal des travaux
 
 ```bash
-adduction-eau travaux
+uv run adduction-eau travaux
 ```
 
 ```
@@ -103,7 +102,18 @@ Ordre optimal des travaux :
   Étape 2 — Réfection I→L (cap=15)
            → Flot après travaux : 49 milliers de m³/jour
 ```
+---
+### Déterminer les travaux sans aucune conditions
 
+```
+┏━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+┃ Ordre ┃ Flot reçu (milliers m3)  ┃
+┡━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│   1   │ 14                       │
+│   2   │ 20                       │
+│   3   │ 3                        │
+└───────┴──────────────────────────┘
+```
 ---
 
 ### Aide
@@ -148,17 +158,6 @@ A ──────────► E ──► H ──► J
 B ──► F ──────────► I ──► K
 C ──────────────────────► L
 D ──► G
-```
-
----
-
-## 🔬 Exploration interactive
-
-Un notebook [Marimo](https://marimo.io) permet de visualiser les flots sur le réseau et de comparer les scénarios de travaux.
-
-```bash
-# Lancer le notebook interactif
-uv run marimo run Solutionmanuelle.py
 ```
 
 ---

@@ -24,21 +24,55 @@ def _():
 
 
 @app.cell
-def _():
-    POS = {
-        "A": (0, 3), "B": (0, 2), "C": (0, 1), "D": (0, 0),
-        "E": (2, 3), "F": (2, 1.5), "G": (2, 0),
-        "H": (4, 3), "I": (4, 1.5),
-        "J": (6, 2.5), "K": (6, 1.5), "L": (6, 0.5),
-    }
-    COULEURS = {
-        "A": "#5DCAA5", "B": "#5DCAA5", "C": "#5DCAA5", "D": "#5DCAA5",
-        "E": "#AFA9EC", "F": "#AFA9EC", "G": "#AFA9EC",
-        "H": "#AFA9EC", "I": "#AFA9EC",
-        "J": "#F0997B", "K": "#F0997B", "L": "#F0997B",
-    }
-    return COULEURS, POS
+def _(RESEAU_ADDUCTION, nx):
+    import collections
 
+    def calcule_pos_et_couleurs(reseau):
+        G = nx.DiGraph()
+        for arc in reseau.arcs:
+            G.add_edge(arc.origine, arc.destination)
+
+        reservoirs = set(reseau.reservoirs)
+        villes = set(reseau.villes)
+
+        couches = {r: 0 for r in reservoirs}
+        file = list(reservoirs)
+        while file:
+            noeud = file.pop(0)
+            for voisin in G.successors(noeud):
+                if voisin not in couches:
+                    couches[voisin] = couches[noeud] + 1
+                    file.append(voisin)
+
+        max_couche = max(couches.values(), default=0)
+        for v in villes:
+            couches[v] = max_couche
+
+        groupes = collections.defaultdict(list)
+        for noeud, couche in couches.items():
+            groupes[couche].append(noeud)
+
+        pos = {}
+        for couche, noeuds in groupes.items():
+            noeuds_tries = sorted(noeuds)
+            n = len(noeuds_tries)
+            for i, noeud in enumerate(noeuds_tries):
+                y = i * (3.0 / max(n - 1, 1)) if n > 1 else 1.5
+                pos[noeud] = (couche * 2, y)
+
+        couleurs = {}
+        for noeud in pos:
+            if noeud in reservoirs:
+                couleurs[noeud] = "#5DCAA5"  
+            elif noeud in villes:
+                couleurs[noeud] = "#F0997B"  
+            else:
+                couleurs[noeud] = "#AFA9EC"   
+
+        return pos, couleurs
+
+    POS, COULEURS = calcule_pos_et_couleurs(RESEAU_ADDUCTION)
+    return COULEURS, POS
 
 @app.cell
 def _(COULEURS, POS, nx, plt):
