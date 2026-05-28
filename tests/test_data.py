@@ -64,7 +64,7 @@ def test_solution_flot_repartition_incoherente():
         SolutionFlot(
             reseau=RESEAU_ADDUCTION,
             valeur=37,
-            repartition={"J": 4, "K": 30, "L": 3}, 
+            repartition={"J": 5, "K": 30, "L": 3}, 
         )
 
 def test_solution_flot_villes_manquantes():
