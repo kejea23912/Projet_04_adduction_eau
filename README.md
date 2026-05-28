@@ -106,13 +106,17 @@ Ordre optimal des travaux :
 ### Déterminer les travaux sans aucune conditions
 
 ```
-┏━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-┃ Ordre ┃ Flot reçu (milliers m3)  ┃
-┡━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━┩
-│   1   │ 14                       │
-│   2   │ 20                       │
-│   3   │ 3                        │
-└───────┴──────────────────────────┘
+Flot actuel : 37 milliers de m³/jour
+Flot maximal théoriaque : 50 milliers de m³/jour
+Gain potentiel: +13 milliers de m³/jour
+                      Arc à améliorer
+┏━━━━━━━┳━━━━━┳━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━┓
+┃ Ordre ┃ Arc ┃ Capacité actuelle ┃ Capacité requise ┃ Gain capacité  ┃
+┡━━━━━━━╇━━━━━╇━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━┩
+│   1   │ A→E │         7         │         20       │        +13     │
+│   2   │ I→L │         4         │         15       │        +11     │
+│   3   │ E→H │         4         │         5        │        +1      │
+└───────┴─────┴───────────────────┴──────────────────┴────────────────┘
 ```
 ---
 
