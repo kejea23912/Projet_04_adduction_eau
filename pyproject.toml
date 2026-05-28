@@ -21,7 +21,6 @@ dependencies = [
 
 [project.scripts]
 adduction-eau = "adduction_eau.app:app"
-APP2 = "marimo:run src/adduction_eau/APP2.py"
 
 [build-system]
 requires = ["uv_build>=0.9.27,<0.10.0"]
