@@ -189,15 +189,14 @@ Les tests couvrent :
 adduction-eau/
 ├── src/
 │   └── adduction_eau/
+│       ├── APP2.py         # interface graphique   
 │       ├── app.py          # Interface CLI (Typer + Rich)
 │       ├── data.py         # Modèles Pydantic (Arc, ReseauEau, SolutionFlot)
 │       └── resolution.py   # Algorithme de flot maximal (NetworkX / Dinic)
 ├── tests/
 │   ├── test_data.py        # Tests des modèles de données
 │   └── test_resolution.py  # Tests de la résolution et de l'optimisation
-├── Solutionmanuelle.py     # Notebook Marimo interactif
-├── pyproject.toml
-├── APP2.py                 # interface graphique 
+├── pyproject.toml 
 └── README.md
 ```
 
@@ -208,7 +207,7 @@ Concrètement, dans DATA.py, vous pouvez personnaliser librement le réseau, et 
 
 ```bash
 # Lancer l'interface interactif
-uv run marimo run APP2.py
+uv run marimo run src\adduction_eau\APP2.py
 ```
 ### utilisation
 

@@ -6,12 +6,11 @@ Utilise l'algorithme de Dinic via networkx.
 
 import networkx as nx
 from pydantic import BaseModel
-from .data import ReseauEau, SolutionFlot
+from .data import ReseauEau, SolutionFlot, capacite_infinie, RESEAU_ADDUCTION
 
 SUPER_SOURCE = "S"
 SUPER_PUITS = "T"
-INFINI = 10_000
-
+INFINI = capacite_infinie(RESEAU_ADDUCTION)
 
 def construit_graphe(reseau: ReseauEau) -> nx.DiGraph:
     graphe = nx.DiGraph()

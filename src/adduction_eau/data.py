@@ -81,3 +81,11 @@ class SolutionFlot(BaseModel):
 
 _chemin = Path(__file__).parent / "reseau.json"
 RESEAU_ADDUCTION = ReseauEau.model_validate(json.loads(_chemin.read_text()))
+
+def capacite_infinie(reseau: ReseauEau) -> int:
+    """Borne supérieure garantie : somme des capacités de tous les réservoirs.
+    
+    Aucun arc ne peut jamais transporter plus que ce que les sources produisent.
+    On ajoute +1 pour que la borne sup de la dichotomie soit strictement hors d'atteinte.
+    """
+    return sum(reseau.reservoirs.values()) + 10
