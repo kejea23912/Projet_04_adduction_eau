@@ -1,0 +1,23 @@
+{
+  "reservoirs": { "A": 15, "B": 15,"C": 15,"D": 10 },
+  "arcs": [
+    { "origine": "A", "destination": "E", "capacite": 7 },
+    { "origine": "B", "destination": "F", "capacite": 10 },
+    { "origine": "B", "destination": "G", "capacite": 7 },
+    { "origine": "C", "destination": "A", "capacite": 5 },
+    { "origine": "C", "destination": "F", "capacite": 5 },
+    { "origine": "D", "destination": "G", "capacite": 10 },
+    { "origine": "E", "destination": "F", "capacite": 5 },
+    { "origine": "E", "destination": "H", "capacite": 4 },
+    { "origine": "E", "destination": "I", "capacite": 15 },
+    { "origine": "F", "destination": "G", "capacite": 5 },
+    { "origine": "F", "destination": "I", "capacite": 15 },
+    { "origine": "G", "destination": "I", "capacite": 15 },
+    { "origine": "H", "destination": "J", "capacite": 7 },
+    { "origine": "I", "destination": "K", "capacite": 30 },
+    { "origine": "I", "destination": "L", "capacite": 4 },
+    { "origine": "K", "destination": "J", "capacite": 10 }
+  ],
+  "villes": ["J", "K", "L"],
+  "capacites_villes": { "J": 15,"K": 20,"L": 15 }
+}

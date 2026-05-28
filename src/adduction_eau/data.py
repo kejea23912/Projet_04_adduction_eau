@@ -5,6 +5,8 @@ Module implémentant les objets représentant le réseau d'adduction d'eau et sa
 
 from typing import Self
 from pydantic import BaseModel, NonNegativeInt, PositiveInt, model_validator
+import json
+from pathlib import Path
 
 class Arc(BaseModel):
     """
@@ -76,26 +78,6 @@ class SolutionFlot(BaseModel):
             raise ValueError("La somme de la répartition doit égaler la valeur du flot.")
         return self
 
-RESEAU_ADDUCTION = ReseauEau(
-    reservoirs={"A": 15, "B": 15, "C": 15, "D": 10},
-    arcs=[
-        Arc(origine="A", destination="E", capacite=7),
-        Arc(origine="B", destination="F", capacite=10),
-        Arc(origine="B", destination="G", capacite=7),
-        Arc(origine="C", destination="A", capacite=5),
-        Arc(origine="C", destination="F", capacite=5),
-        Arc(origine="D", destination="G", capacite=10),
-        Arc(origine="E", destination="F", capacite=5),
-        Arc(origine="E", destination="H", capacite=4),
-        Arc(origine="E", destination="I", capacite=15),
-        Arc(origine="F", destination="G", capacite=5),
-        Arc(origine="F", destination="I", capacite=15),
-        Arc(origine="G", destination="I", capacite=15),
-        Arc(origine="H", destination="J", capacite=7),
-        Arc(origine="I", destination="K", capacite=30),
-        Arc(origine="I", destination="L", capacite=4),
-        Arc(origine="K", destination="J", capacite=10),
-    ],
-    villes=["J", "K", "L"],
-    capacites_villes={"J": 15, "K": 20, "L": 15},
-)
+
+_chemin = Path(__file__).parent / "reseau.json"
+RESEAU_ADDUCTION = ReseauEau.model_validate(json.loads(_chemin.read_text()))
