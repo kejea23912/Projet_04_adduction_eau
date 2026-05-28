@@ -9,5 +9,7 @@ wheels/
 # Environnements virtuels
 .venv
 
+.coverage
+htmlcov/
 
 __marimo__/
