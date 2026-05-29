@@ -17,6 +17,7 @@
 Il calcule le **flot maximal** d'un réseau de canalisations, identifie les **goulots d'étranglement**, détermine les capacités à rénover, et ordonne les travaux pour maximiser le gain à chaque étape.
 
 Le tout avec une sortie terminal et une interface de commandes fluide via [Typer](https://typer.tiangolo.com), et une interface graphique via [Marimo](https://marimo.io)
+
 ---
 
 ## ✨ Fonctionnalités de l'interface de commandes
@@ -105,6 +106,10 @@ Ordre optimal des travaux :
 ---
 ### Déterminer les travaux sans aucune conditions
 
+
+```bash
+uv run adduction-eau optimisation
+``` 
 ```
 Flot actuel : 37 milliers de m³/jour
 Flot maximal théoriaque : 50 milliers de m³/jour
@@ -123,7 +128,7 @@ Gain potentiel: +13 milliers de m³/jour
 ### Aide
 
 ```bash
-adduction-eau --help
+uv run adduction-eau --help
 ```
 
 ```
@@ -147,7 +152,7 @@ capacité des réseau il va ouffrir les traveaux optimal
 
 ---
 ## 🗺️ Architecture du réseau
-
+Dans le cadre de notre cours de Supply Chain, nous avions déjà un réseau attribué pour le résoudre avec les consignes données
 Le réseau modélisé est un graphe orienté avec :
 
 - **4 réservoirs** (nœuds sources) : `A`, `B`, `C`, `D`
@@ -163,7 +168,7 @@ B ──► F ──────────► I ──► K
 C ──────────────────────► L
 D ──► G
 ```
-
+Mais vous pouvais modéliser votre propre réseau dans Reseau.json
 ---
 
 ## 🧪 Tests
@@ -174,7 +179,11 @@ uv run pytest
 
 # Avec verbosité
 uv run pytest -v
+
+# pour voir la couverture
+uv run pytest --cov
 ```
+
 
 Les tests couvrent :
 
@@ -205,8 +214,8 @@ adduction-eau/
 
 ---
 ## APP2.py 
-Il s’agit d’une interface graphique supplémentaire qui nous aide à résoudre les problèmes du réseau, quelle que soit la configuration des ARC.
-Concrètement, dans DATA.py, vous pouvez personnaliser librement le réseau, et grâce à cette interface, vous trouverez toujours une solution d’amélioration.
+Il s’agit d’une interface graphique qui nous aide à résoudre les problèmes du réseau, quelle que soit la configuration des ARC.
+Concrètement, dans Reseau.json, vous pouvez personnaliser librement le réseau, et grâce à cette interface, vous trouverez toujours une solution d’amélioration.
 
 ```bash
 # Lancer l'interface interactif
